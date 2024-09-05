@@ -1,0 +1,2 @@
+https://psychology.stackexchange.com/questions/3591/how-well-can-a-human-generated-random-number-be-predicted
+https://github.com/DragonDmoney/HumanRandomness/blob/master/neuralNetwork.py
