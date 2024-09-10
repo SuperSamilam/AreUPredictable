@@ -1,0 +1,18 @@
+get data function simple
+
+A layer is a layer in a machine learning
+A dence layer is a layer where are prevoicly neurns connects to all other neruns and everything like that
+it consitsits of weights, biases, forward passes and backward passes
+weights är ett värde varje neutron har för att definera hur mycket den påverkar
+biases efter varje weight har gjort sitt lägger den till en bias som också är individuell för varje neutron
+Forward pass är när man lägger in datan och den kalkyleras
+Backward passes används senare för att justera vikterna i ML för att kunna få ett bättre resultat senare
+
+ReLU Rectified Liner unit
+Vad relus gör är att dom funkar som som abs
+
+Softmax converst logist to probebiltis
+
+Loss is how much of the predictionas were wrong
+
+Loss class entory do the same as loss kinda
