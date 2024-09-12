@@ -1,56 +1,68 @@
 import numpy as np
+import math
+import nnfs as nnfs
+from nnfs.datasets import spiral_data
 
-inputs = [[1, 2, 3, 2.5],
-         [2, 5, -1, 2],
-         [-1.5 ,2.7 ,3.3 , -0.8]]
+nnfs.init()
 
-weights = [[0.2, 0.8, -0.5, 1],
-           [0.5, -0.91, 0.26, -0.5],
-           [-0.26, -0.27, 0.17, 0.87]]
+class Layer_Dense:
+    def __init__(self, n_inputs, n_neurons):
+        self.weights = 0.10 * np.random.randn(n_inputs, n_neurons)
+        self.biases = np.zeros((1, n_neurons)) #1d array of zeros
+    def forward(self, inputs):
+        self.output = np.dot(inputs, self.weights) + self.biases
+    def backwards(self):
+        pass
 
-biases = [2, 3, 0.5]
+class Activation_ReLU:
+    def forward(self, inputs):
+        self.output = np.maximum(0, inputs)
+    def backward(self):
+        pass
 
+class Activation_Softmax():
+    def forward(self, inputs):
+        exp_values = np.exp(inputs-np.max(inputs, axis=1, keepdims=True))
+        probabilities = exp_values/np.sum(exp_values, axis=1, keepdims=True)
+        self.output = probabilities
 
-weights2 = [[0.1, -0.14, 0.5],
-           [-0.5, 0.12, -0.33],
-           [-0.44, 0.73, -0.13]]
+class Loss():
+    def calculate(self, output, y):
+        sample_losses = self.forward(output, y)
+        data_loss = np.mean(sample_losses)
+        return data_loss
+    
+class Loss_CatagoricalCrossentrpy(Loss):
+    def forward(self, y_pred, y_true):
+        samples = len(y_pred)
+        y_pred_clipped = np.clip(y_pred, 1e-7, 1-1e-7)
 
-biases2 = [-1, 2, -0.5]
+        #Allows for hot enconding and scalar
+        if len(y_true.shape) == 1:
+            correct_confidences = y_pred_clipped[range(samples), y_true]
+        elif (len(y_true.shape) == 2):
+            correct_confidences = np.sum(y_pred_clipped*y_true, axis=1)
 
-layer1_output = np.dot(inputs, np.array(weights).T) + biases
+        negative_log_likelihood = -np.log(correct_confidences)
+        return negative_log_likelihood
 
-layer2_output = np.dot(layer1_output, np.array(weights2).T) + biases2
+X, y = spiral_data(100,3)
 
-print(layer2_output)
+layer1 = Layer_Dense(2,3)
+activation1 = Activation_ReLU()
 
+layer2 = Layer_Dense(3, 3)
+activation2 = Activation_Softmax()
 
+layer1.forward(X)
+activation1.forward(layer1.output)
 
+layer2.forward(activation1.output)
+activation2.forward(layer2.output)
 
+print(activation2.output[:5])
 
+loss_function = Loss_CatagoricalCrossentrpy()
+loss = loss_function.calculate(activation2.output, y)
 
-
-
-
-
-
-
-
-# input = [1,2,3, 2.5]
-
-# weights = [[0.2, 0.8, -0.5, 1],
-#            [0.5, -0.91, 0.26, -0.5],
-#            [-0.26, -0.27, 0.17, 0.87]]
-
-# biases = [2,3,0.5]
-
-# layer_outputs = []
-# for neuron_weights, neuron_bias in zip(weights, biases): #Loop though each weight and biases, each neurons has its own weight and bias
-#     neuron_output = 0
-#     #Do the calculation for weight for every neuron and add them
-#     for n_input, weight in zip(input, neuron_weights):
-#         neuron_output += n_input*weight
-#     neuron_output += neuron_bias #Add the bias
-#     layer_outputs.append(neuron_output) #Add the total neuron output
-
-
-# print(layer_outputs) 
+print("Loss: ", loss)
