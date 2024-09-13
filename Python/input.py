@@ -1,8 +1,8 @@
 
-f = open("hugo.txt", "a")
+f = open("data.txt", "a")
 
 
-for i in range(50):
+for i in range(100):
     data = input()
     if (data.isnumeric() == False):
         if (data == 's'):
@@ -12,7 +12,7 @@ for i in range(50):
         continue
     data = int(data)
     if (0 <= data and data <= 9):
-        f.write(str(data))
+        f.write(str(data) + ", ")
         
 f.close()
 
