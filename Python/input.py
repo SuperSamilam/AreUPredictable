@@ -1,5 +1,5 @@
 
-f = open("elliot.txt", "a")
+f = open("hugo.txt", "a")
 
 
 for i in range(50):
