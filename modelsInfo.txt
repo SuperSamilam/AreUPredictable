@@ -1,5 +1,0 @@
-19model
-    layers 
-        Dense 20 none
-        Dense 32 Relu
-        Dense 10 Softmax

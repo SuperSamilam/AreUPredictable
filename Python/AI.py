@@ -1,28 +1,33 @@
 import tensorflow as tf
 from tensorflow import keras
 import numpy as np
-import os
+import PatternFinder as pattern
 
-modelName = "1-9Model"
+modelName = "0-100model2"
 
 class Data():
     def loadDataFromFile(self, filename, depth = 3):
         self.X = []
         self.y = []
+        self.input = []
 
         with open(filename, 'r') as file:
             self.data = file.read()
 
         self.data = [int(num.strip()) for num in self.data.split(',') if num.strip()]
+        self.input = np.array(self.data)
         self.setupData(depth)
 
     def makeRandomDataSet(self, depth):
         self.X = []
         self.y = []
         self.data = ""
+        self.input = []
+
         for i in range(100):
             self.data += str(np.random.randint(0, 10)) + ", "
         self.data = [int(num.strip()) for num in self.data.split(',') if num.strip()]
+        self.input = self.data
         self.setupData(depth)
         
     def setupData(self, depth):
@@ -41,13 +46,13 @@ class Data():
 
 class NeuralNetwork():
     def load(self):
-        self.model = tf.keras.models.load_model(modelName + '.keras')
+        self.model = tf.keras.models.load_model("./models/" + modelName + '.keras')
 
     def create(self):
         self.model = tf.keras.Sequential()
-        self.model.add(tf.keras.layers.Dense(units=20, input_dim=3))
-        self.model.add(tf.keras.layers.Dense(units=32, activation='relu'))
-        self.model.add(tf.keras.layers.Dense(units=10, activation='softmax'))
+        self.model.add(tf.keras.layers.Dense(units=50, input_dim=3))
+        self.model.add(tf.keras.layers.Dense(units=170, activation='relu'))
+        self.model.add(tf.keras.layers.Dense(units=101))
 
         opt = keras.optimizers.Adam(learning_rate=0.05)
 
@@ -56,14 +61,18 @@ class NeuralNetwork():
                     metrics=['accuracy'])
     
     def train(self, data):
-       self. model.fit(data.X, data.y, epochs=2000)
+       self. model.fit(data.X, data.y, epochs=800)
 
     def test(self, data):
         loss, accuracy = self.model.evaluate(data.X,  data.y, verbose=2)
         # print(f"Loss: {loss} Accuracy: {accuracy}")
 
     def save(self):
-        self.model.save(modelName + '.keras')
+        self.model.save("./models/" + modelName + '.keras')
+
+    def predict(self, inputdata):
+        prediction = self.model.predict(inputdata)
+        return prediction
 
     def runRandomTests(self, amount, depth):
         meanAccuracy = []
@@ -77,28 +86,33 @@ class NeuralNetwork():
         acc = np.mean(meanAccuracy)
         print(f"Accuracy of : {amount} tests: {acc}")
 
-#Real dataset
-nn = NeuralNetwork()
-nn.create()
+def makeNewNeuralNetwork():
+    nn = NeuralNetwork()
+    nn.create()
+    trainData = Data()
+    trainData.loadDataFromFile("./data/data-1-100/train1100.txt")
+    testData = Data()
+    testData.loadDataFromFile("./data/data-1-100/test1100.txt")
+    nn.train(trainData)
+    nn.test(testData)
+    nn.save()
 
-trainData = Data()
-trainData.loadDataFromFile("./data/train/train09.txt")
-testData = Data()
-testData.loadDataFromFile("./data/test/test09.txt")
+def loadAndTestOldNetwork():
+    nn = NeuralNetwork()
+    nn.load()
+    testData = Data()
+    testData.loadDataFromFile("./data/data-1-100/test1100.txt")
+    nn.test(testData)
 
-nn.train(trainData)
-nn.test(testData)
+def loadNetwork():
+    nn = NeuralNetwork()
+    nn.load()
+    return nn
 
-nn.save()
 
-# nn = NeuralNetwork()
-# nn.load()
-# nn.save()
-# data = Data()
-# data.makeRandomDataSet(3)
-# nn.test(data)
-# nn.runRandomTests(100, 3)
 
+loadAndTestOldNetwork()
+# makeNewNeuralNetwork()
 
 
 

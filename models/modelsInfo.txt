@@ -1,0 +1,18 @@
+19model
+    layers 
+        Dense 20 none
+        Dense 32 Relu
+        Dense 10 Softmax
+
+0-100models
+    layers
+        Dense 60
+        Dense 200 relu
+        Dense 101 Softmax
+
+0-100models
+    layers
+        Dense 60
+        Dense 250 relu
+        Dense 101 Softmax
+     
