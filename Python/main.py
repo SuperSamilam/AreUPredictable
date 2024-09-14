@@ -1,54 +1,43 @@
-import AI as ai
-import PatternFinder as pf
-import numpy as np
+import os
+import ML as ml
+import Data as data
 
-model = ai.loadNetwork()
-testData = ai.Data()
-testData.loadDataFromFile("./data/data-1-100/test1100.txt")
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
-inputs = []
-right = 0
-
-def getPredictionFeatures():
-    last_three_elements = inputs[-3:]
-    fixedList = [0] * (3 - len(last_three_elements)) + last_three_elements
-    return np.array(fixedList).reshape(1,-1)
-
-for i in range(len(testData.input)):
-    feauters = getPredictionFeatures()
-    print(feauters)
-    prediction = model.predict(feauters)
-    predicted_classes = np.argmax(prediction, axis=1)
-    print(f"Input: {testData.input[i]} Guess: {predicted_classes}")
-    inputs.append(testData.input[i])
-    # print(predicted_classes)
-    if (testData.input[i] == predicted_classes):
-        right += 1
-    # confidence = {index: value for index, value in enumerate(np.array(prediction[0]))}
-    # guess = max(confidence, key=confidence.get)
-    # print(f"Input: {testData.input[i]} Guess: {guess}")
+depth = 3
+modelName = "model1"
+trainFile = "./data/data09/train09.txt"
+testFile = "./data/data09/test09.txt"
+neuronsmiddle = 18
+epoch = 2000
 
 
-print(f"Right: {right} Procenteage: {right/len(testData.X)}")
 
 
-# for i in range(100):
-#     data = input()
-#     if (data.isnumeric() == False):
-#         if (data == 's'):
-#             print("stopping")
-#             break
-#         i-1
-#         continue
-#     data = int(data)
-#     if (0 <= data and data <= 100):
+def makeNewNN():
+    trainData = data.Data()
+    testData = data.Data()
+    trainData.loadDataFromFile(trainFile, depth)
+    testData.loadDataFromFile(testFile, depth)
+    nn = ml.NeuralNetwork()
 
-#         prediction = model.predict(getPredictionFeatures())
-#         confidence = {index: value for index, value in enumerate(np.array(prediction[0]))}
-#         guess = max(confidence, key=confidence.get)
-#         print(f"Computer Guessed: {guess}")
-#         # print(confidence)
-#         inputs.append(data)
-        
+    nn.ctt(depth, neuronsmiddle, trainData, testData, epoch)
+    nn.save(modelName, neuronsmiddle, depth)
+    return nn
+
+def loadAndTestOldNetwork():
+    nn = ml.NeuralNetwork()
+    nn.load(modelName)
+    testData = data.Data()
+    testData.loadDataFromFile(testFile, depth)
+    nn.test(testData)
+    return nn
+
+def loadNetwork():
+    nn = ml.NeuralNetwork()
+    nn.load(modelName)
+    return nn
 
 
+# makeNewNN()
+loadAndTestOldNetwork()

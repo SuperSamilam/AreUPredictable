@@ -1,7 +1,7 @@
 #This file is mainly for being able to find datasets of different structurs and convert it to my structure
 #Currently I have found 2 datasets I can use and therefor only impemented theese types of sturcutes
 
-filename = "./data/data-1-100/test1100.txt"
+filename = "./data/data09/train09.txt"
 
 #Structure 1 
 # 161906326230734734 
@@ -9,16 +9,16 @@ filename = "./data/data-1-100/test1100.txt"
 # 1, 6, 1, 9, 0, 6, 3, 2, 6, 2, 3, 0, 7 ect
 
 #Reads file
-# with open(filename, 'r') as file:
-#     data = file.read()
+with open(filename, 'r') as file:
+    data = file.read()
 
-# #Clears file
-# with open(filename, 'w') as file:
-#     pass
+#Clears file
+with open(filename, 'w') as file:
+    pass
 
-# with open(filename, 'w') as file:
-#     for char in data:
-#         file.write(char + ", ")
+with open(filename, 'w') as file:
+    for char in data:
+        file.write(char + ", ")
 
 
 #Structure 2 not only single digits
@@ -26,16 +26,16 @@ filename = "./data/data-1-100/test1100.txt"
 #Should become
 # 50, 4, 81, 40, 2
 
-with open(filename, 'r') as file:
-    data = file.read()
+# with open(filename, 'r') as file:
+#     data = file.read()
 
-data = data.replace("'", "").split(',')
-data = [int(x.strip()) for x in data]
+# data = data.replace("'", "").split(',')
+# data = [int(x.strip()) for x in data]
 
-#Clears file
-with open(filename, 'w') as file:
-    pass
+# #Clears file
+# with open(filename, 'w') as file:
+#     pass
 
-with open(filename, 'w') as file:
-    for i in data:
-        file.write(str(i) + ", ")
+# with open(filename, 'w') as file:
+#     for i in data:
+#         file.write(str(i) + ", ")
