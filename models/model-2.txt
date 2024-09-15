@@ -1,0 +1,8 @@
+Model: model-2 
+ 
+     Accuracy: 0.2590673565864563
+     Loss: 2.1791434288024902
+ 
+     Depth: 3
+     NeuronLayers: input 3, 18 relu, 10 softmax 
+ 
