@@ -1,8 +1,9 @@
+import numpy as np
 import os
+import tensorflowjs as tfjs
 import ML as ml
 import PatternFinder as pf
 import Data as data
-import numpy as np
 
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
@@ -124,5 +125,8 @@ def autoPlay():
     print(f"Accuracy: {accuracy}")
 
 
-autoPlay()
+# autoPlay()
 # makeNewNN()
+# nn = loadNetwork()
+# print(nn.model)
+# tfjs.converters.save_keras_model(nn.model, "webmodel")

@@ -51,6 +51,9 @@ class NeuralNetwork():
             file.write(f"{indent} Depth: {depth}\n")
             file.write(f"{indent} NeuronLayers: input 3, {neurons} relu, 10 softmax \n \n")
 
+    def websave(self, modelName):
+        self.model.save("./models/web" + modelName)
+
     def runRandomTests(self, amount, depth):
         meanAccuracy = []
         for i in range(amount):
