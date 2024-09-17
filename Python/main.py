@@ -1,6 +1,5 @@
 import numpy as np
 import os
-import tensorflowjs as tfjs
 import ML as ml
 import PatternFinder as pf
 import Data as data

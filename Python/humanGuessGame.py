@@ -1,9 +1,6 @@
-import pygame, sys
-import ML as ml
-import main as m
-import PatternFinder as pf
-import numpy as np
+import pygame
 from enum import Enum
+import Data as data
 
 pygame.init()
 
@@ -47,44 +44,28 @@ buttonRect = pygame.Rect(100,500, 200, 50)
 
 highscores = ["1: ","2: ","3: ","4: ","5: ","6: ","7: ","8: ","9: ","10: "]
 
-inputed = []
-patternFinder, nn = m.initalizeNewGame()
 acc = 0
 right = 0.0
+itteration = 0
 
-f = open("humanInput.txt", "a")
-f.write('\n \n')
+data = data.Data()
+data.loadDataFromFile("./data/data09/GuessGame.txt",3)
 
 
-def predict():
-    global input, nn, patternFinder, acc, accText, playerInput, aiText, right, rightText, guessesText
-    inputs = np.array(m.get_last_three_elements(inputed)).reshape(1, -1)
-    aiConfidence = nn.predictRaw(inputs)
-    depthNumber, patternDepth = patternFinder.aritmeticPredictor(inputed, 5)
-    number, numberConfidence = patternFinder.strictPatternPredictor(inputed, 15)
+def guess():
+    global input, acc, accText, playerInput, aiText, right, rightText, guessesText, itteration
 
-    guess = np.argmax(aiConfidence)
-    if (numberConfidence > 1.5):#confidence is very high meaning it probely is a pattern
-        guess = number
-    elif (patternDepth >= 3): #3 numbers has been incresing contunisly in a direction example 1,2,3
-        guess = depthNumber
-    elif (len(inputed) == 0):
-        guess = 7
+    aiValue = data.input[itteration]
+    itteration += 1
+    if (aiValue == input):
+        right += 1
 
-    if (input == guess):
-        right = right + 1
-
-    print(guess)
-    
-    inputed.append(input)
-    f.write(str(input) + ", ")
-
-    acc = right/len(inputed)
+    acc = right/itteration
     accText = "Accuracy: " + str(round(acc*100, 3)) + "%"
     playerInput = "Input:  " + str(input)
-    aiText = "AI Guess: " + str(guess)
+    aiText = "AI Input: " + str(aiValue)
     rightText = "Guessed Right: " + str(int(right))
-    guessesText = "Gusses: " + str(len(inputed))
+    guessesText = "Gusses: " + str(itteration)
 
     
     
@@ -120,7 +101,7 @@ while run:
         inputrect = pygame.Rect(100,100, 200, 32)
         pygame.draw.rect(screen, darkGray, inputrect)
 
-        renderText("ARE YOU PREDICTABLE?", screen, 32, black, PositionType.XOFFSET, None, 0,30)
+        renderText("ARE YOU PREDICTABLE? GUESS", screen, 32, black, PositionType.XOFFSET, None, 0,30)
         renderText(player_inputField, screen, 32, black, PositionType.CENTER, inputrect, 0,0)
         renderText("Please only enter in a number 1-9", screen, 18, gray, PositionType.CENTER, inputrect, 0,25)
 
@@ -132,7 +113,7 @@ while run:
 
         changeSceneButton("Highscores", buttonRect, lightBlue, "Highscores", screen, 32, black)
     elif scene == "Highscores":
-        renderText("ARE YOU PREDICTABLE?", screen, 32, black, PositionType.XOFFSET, None, 0,30)
+        renderText("ARE YOU PREDICTABLE? GUESS", screen, 32, black, PositionType.XOFFSET, None, 0,30)
         renderText("Highscores", screen, 28, black, PositionType.XOFFSET, None, 0,60)
 
         renderText(highscores[0], screen, 65, gold, PositionType.XOFFSET, None, 0,85)
@@ -158,7 +139,7 @@ while run:
             elif event.key == pygame.K_RETURN:
                 if len(player_inputField) == 1:
                     
-                    predict()
+                    guess()
                     playerInput = playerInput[0:-1]
                     playerInput += player_inputField
 
