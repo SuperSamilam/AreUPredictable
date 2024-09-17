@@ -60,11 +60,11 @@ def predict():
     global input, nn, patternFinder, acc, accText, playerInput, aiText, right, rightText, guessesText
     inputs = np.array(m.get_last_three_elements(inputed)).reshape(1, -1)
     aiConfidence = nn.predictRaw(inputs)
-    depthNumber, patternDepth = patternFinder.aritmeticPredictor(inputed, 5)
+    depthNumber, patternDepth = patternFinder.aritmeticPredictor(inputed, 4)
     number, numberConfidence = patternFinder.strictPatternPredictor(inputed, 15)
 
     guess = np.argmax(aiConfidence)
-    if (numberConfidence > 1.5):#confidence is very high meaning it probely is a pattern
+    if (numberConfidence > 1):#confidence is very high meaning it probely is a pattern
         guess = number
     elif (patternDepth >= 3): #3 numbers has been incresing contunisly in a direction example 1,2,3
         guess = depthNumber
