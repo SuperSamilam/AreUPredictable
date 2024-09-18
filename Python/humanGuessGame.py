@@ -181,5 +181,4 @@ while run:
     pygame.display.flip()   
 
 
-f.close()
 pygame.quit()

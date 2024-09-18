@@ -131,7 +131,32 @@ def autoPlay():
             8:0,
             9:0
         }
+    #min should be 1, max should be 2
+    keyAmountMultiplyer = {
+            1:1,
+            2:1,
+            3:1,
+            4:1,
+            5:1,
+            6:1,
+            7:1,
+            8:1,
+            9:1
+        }
+    
     aiRight = {
+            1:0,
+            2:0,
+            3:0,
+            4:0,
+            5:0,
+            6:0,
+            7:0,
+            8:0,
+            9:0
+        }
+    
+    numberSameafterPress = {
             1:0,
             2:0,
             3:0,
@@ -156,7 +181,18 @@ def autoPlay():
             sum += value
             
         for key in keyAmounts.keys():
-            aiConfidence[0][key] += keyAmounts[key]/(max(sum, 1))*2
+            keyAmountMultiplyer[key] = keyAmounts[key]/(max(sum, 1))*2 + 1
+            
+        for key in keyAmounts.keys():
+            aiConfidence[0][key] += keyAmounts[key]/(max(sum, 1))*keyAmountMultiplyer[key]
+            
+        if len(inputed) >= 1:
+            if numberSameafterPress[inputed[-1]]/keyAmounts[inputed[-1]] > 0.25:
+                aiConfidence[0][inputed[-1]] = 0.1
+            elif numberSameafterPress[inputed[-1]]/keyAmounts[inputed[-1]] > 0.5:
+                aiConfidence[0][inputed[-1]] = 0.2
+            if numberSameafterPress[inputed[-1]]/keyAmounts[inputed[-1]] > 0.9:
+                aiConfidence[0][inputed[-1]] = 0.5
 
         guess = np.argmax(aiConfidence)
         if (numberConfidence > 1):#confidence is very high meaning it probely is a pattern
@@ -172,17 +208,27 @@ def autoPlay():
             aiRight[testData.input[i]] += 1
 
         inputed.append(testData.input[i])
+        if (len(inputed) >= 2):
+            if (inputed[-2] == inputed[-1]):
+                numberSameafterPress[inputed[-1]] += 1
+        
 
     accuracy = right/len(testData.input)
     print(f"Accuracy: {accuracy}")
     print(f"Amount of times pressed each key: {keyAmounts}")
     print(f"What numbers did the AI guess right: {aiRight}")
+    print(f"Key Multipler Values at end: {keyAmountMultiplyer}")
+    print(f"Key Multipler Values at end: {numberSameafterPress}")
 
 
 # autoPlay()
 # makeNewNN()
+
+
 nn = loadNetwork()
 autoPlay()
+
+
 # loadAndTestOldNetwork()
 # print(nn.model)
 # tfjs.converters.save_keras_model(nn.model, "webmodel")
