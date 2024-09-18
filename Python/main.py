@@ -180,19 +180,19 @@ def autoPlay():
         for value in keyAmounts.values():
             sum += value
             
-        for key in keyAmounts.keys():
-            keyAmountMultiplyer[key] = keyAmounts[key]/(max(sum, 1))*2 + 1
+        # for key in keyAmounts.keys():
+        #     keyAmountMultiplyer[key] = keyAmounts[key]/(max(sum, 1))*2 + 1
             
-        for key in keyAmounts.keys():
-            aiConfidence[0][key] += keyAmounts[key]/(max(sum, 1))*keyAmountMultiplyer[key]
+        # for key in keyAmounts.keys():
+        #     aiConfidence[0][key] += keyAmounts[key]/(max(sum, 1))*keyAmountMultiplyer[key]
             
-        if len(inputed) >= 1:
-            if numberSameafterPress[inputed[-1]]/keyAmounts[inputed[-1]] > 0.25:
-                aiConfidence[0][inputed[-1]] = 0.1
-            elif numberSameafterPress[inputed[-1]]/keyAmounts[inputed[-1]] > 0.5:
-                aiConfidence[0][inputed[-1]] = 0.2
-            if numberSameafterPress[inputed[-1]]/keyAmounts[inputed[-1]] > 0.9:
-                aiConfidence[0][inputed[-1]] = 0.5
+        # if len(inputed) >= 1:
+        #     if numberSameafterPress[inputed[-1]]/keyAmounts[inputed[-1]] > 0.25:
+        #         aiConfidence[0][inputed[-1]] = 0.1
+        #     elif numberSameafterPress[inputed[-1]]/keyAmounts[inputed[-1]] > 0.5:
+        #         aiConfidence[0][inputed[-1]] = 0.2
+        #     if numberSameafterPress[inputed[-1]]/keyAmounts[inputed[-1]] > 0.9:
+        #         aiConfidence[0][inputed[-1]] = 0.5
 
         guess = np.argmax(aiConfidence)
         if (numberConfidence > 1):#confidence is very high meaning it probely is a pattern
@@ -217,16 +217,18 @@ def autoPlay():
     print(f"Accuracy: {accuracy}")
     print(f"Amount of times pressed each key: {keyAmounts}")
     print(f"What numbers did the AI guess right: {aiRight}")
-    print(f"Key Multipler Values at end: {keyAmountMultiplyer}")
-    print(f"Key Multipler Values at end: {numberSameafterPress}")
+    # print(f"Key Multipler Values at end: {keyAmountMultiplyer}")
+    # print(f"Key Multipler Values at end: {numberSameafterPress}")
 
 
 # autoPlay()
 # makeNewNN()
 
+#Du skulle fått högre accuracy genom att bara spanna någon knapp förutom 5
+#Ändå sjukt du fr 7% ain får 19%
 
-nn = loadNetwork()
-autoPlay()
+# nn = loadNetwork()
+# autoPlay()
 
 
 # loadAndTestOldNetwork()

@@ -182,3 +182,7 @@ while run:
 
 
 pygame.quit()
+
+#Du ska gissa vilket nummer som kommer sen, det är mitt dataset
+
+##får jag veta vilket nummer som var rätt?
