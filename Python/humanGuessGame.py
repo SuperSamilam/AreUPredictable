@@ -50,7 +50,8 @@ itteration = 0
 
 data = data.Data()
 data.loadDataFromFile("./data/data09/GuessGame.txt",3)
-
+f = open("humanInput.txt", "a")
+f.write('\n \n')
 
 def guess():
     global input, acc, accText, playerInput, aiText, right, rightText, guessesText, itteration
@@ -60,10 +61,20 @@ def guess():
     if (aiValue == input):
         right += 1
 
+
+    last3 = ""
+    if itteration >= 3: 
+        last3 += str(data.input[itteration - 2]) + ", "
+    if itteration >= 2:  # Ensure iterator-1 is valid
+        last3 += str(data.input[itteration - 1]) + ", "
+    if itteration < len(data.input):  # Ensure iterator is valid
+        last3 += str(data.input[itteration])
+
     acc = right/itteration
+    f.write(str(input) + ", ")
     accText = "Accuracy: " + str(round(acc*100, 3)) + "%"
     playerInput = "Input:  " + str(input)
-    aiText = "AI Input: " + str(aiValue)
+    aiText = "AI Input: " + last3
     rightText = "Guessed Right: " + str(int(right))
     guessesText = "Gusses: " + str(itteration)
 
@@ -181,6 +192,7 @@ while run:
     pygame.display.flip()   
 
 
+f.close()
 pygame.quit()
 
 #Du ska gissa vilket nummer som kommer sen, det är mitt dataset

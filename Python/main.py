@@ -99,8 +99,8 @@ def humanPlay():
                 guess = number
             elif (patternDepth >= 3): #3 numbers has been incresing contunisly in a direction example 1,2,3
                 guess = depthNumber
-            elif (i == 0):
-                guess = 7
+            # elif (i == 0):
+            #     guess = 7
 
             if (data == guess):
                 right = right + 1
@@ -113,6 +113,7 @@ def humanPlay():
 
 
 def autoPlay():
+    
     patternFinder, nn = initalizeNewGame()
     testData = data.Data()
     testData.loadDataFromFile(testFile, depth)
@@ -176,9 +177,9 @@ def autoPlay():
         number, numberConfidence = patternFinder.strictPatternPredictor(inputed, strictDepth)
         
 
-        sum = 0
-        for value in keyAmounts.values():
-            sum += value
+        # sum = 0
+        # for value in keyAmounts.values():
+        #     sum += value
             
         # for key in keyAmounts.keys():
         #     keyAmountMultiplyer[key] = keyAmounts[key]/(max(sum, 1))*2 + 1
